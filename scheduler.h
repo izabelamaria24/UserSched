@@ -10,7 +10,7 @@ typedef struct CPU
     
   struct User *current; // userul de pe CPU
   
-  struct User* (*generate_users)(struct CPU *, int cnt_users); // generate users
+  struct User* (*generate_users)(struct CPU *); // generate users
 };
 
 typedef struct User
@@ -18,14 +18,17 @@ typedef struct User
   int uid; // user ID
   char username[16]; // username
   float weight; // user weight
+  float allocated_time; 
+
   int cnt_processes; // numarul total de procese
+  
 
   struct Process *current; // procesul curent
 
   struct User *prev; // pointer catre userul anterior
   struct User *next; // pointer catre userul urmator
                      
-  struct Process* (*generate_processes)(struct User*, int cnt_processes); // generate processes
+  struct Process* (*generate_processes)(struct User*); // generate processes
 };
 
 typedef struct Process
