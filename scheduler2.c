@@ -46,7 +46,7 @@ Process* generate_processes(User* usr)
       kill(getpid(), SIGSTOP);
       while(true){
         sleep(1);
-        printf("Process %d running on CPU...\n", getpid());
+        //printf("Process %d running on CPU...\n", getpid());
 
       }
   
@@ -87,7 +87,7 @@ User* generate_users(CPU* cpu)
     usr->weight = (rand() % SPAN_USER_WEIGHT) / (float)SPAN_USER_WEIGHT;
     usr->allocated_time_value = BASE_USER_TIME * usr->weight;
     usr->total_user_time = 0;
-    printf("User ID: %d has allocated time %.5f \n", usr->uid, usr->allocated_time);
+    printf("User ID: %d has allocated time %.5f \n", usr->uid, usr->allocated_time_value);
 
     usr->cnt_processes_available = 0;
     //usr->cnt_processes_incoming = rand() % SPAN_CNT_PROCESSES + 1;
@@ -190,14 +190,33 @@ float rr_processes_scheduler(User* usr)
       printf("Pornim executia procesului cu exec time %f\n", proc->exec_time);
       
       kill(proc->pid, SIGCONT);
-      sleep(actual_exec_time);
+      struct timespec req;
+      req.tv_sec = (time_t)actual_exec_time;
+      req.tv_nsec = (long)((actual_exec_time - req.tv_sec) * 1e9);
+      nanosleep(&req, NULL);
       kill(proc->pid, SIGSTOP);
+
+      if(proc->exec_time > actual_exec_time)
+      {
+        if(actual_exec_time < 0)
+            printf("DA NEGATIV\n");
+        proc->exec_time-=actual_exec_time;
+      }
+      else
+      {
+        proc->exec_time = 0;
+      }
+
+      if(available_user_time > actual_exec_time)
+      {
+        available_user_time-=actual_exec_time;
+      }
+      else
+      {
+        available_user_time = 0;
+      }
       
-      printf("exec_time %f actual_exec_time %f\n",proc->exec_time, actual_exec_time );
-      proc->exec_time-=actual_exec_time;
-      available_user_time-=actual_exec_time;
-      
-      printf("Oprim executia procesului cu exec time %f\n", proc->exec_time);
+      //printf("Oprim executia procesului cu exec time %f\n", proc->exec_time);
       
       if (proc->exec_time <= 0) {
         printf("Process %d has finished execution.\n", proc->pid);
@@ -212,9 +231,11 @@ float rr_processes_scheduler(User* usr)
           proc->prev->next = proc->next;
           proc->next->prev = proc->prev;
           proc = proc->next;
+          printf("free %d\n", aux->pid);
           free(aux);
         }
         else{
+        printf("free %d\n", proc->pid);
           free(proc);
           proc = NULL;
         }
@@ -230,7 +251,6 @@ float rr_processes_scheduler(User* usr)
   } 
   else
   {
-    printf("Am intrat pe else\n");
     float waited = min(retval, usr->allocated_time);
     printf("Retval %f, user %f, Waited %f\n",retval, usr->allocated_time,waited);
     //sleep(waited);
@@ -256,14 +276,20 @@ float wrr_users_scheduler(CPU* cpu)
  
     if (usr->cnt_processes_incoming == 0 && usr->cnt_processes_available == 0)
     {
-      printf("Am intrat aici inainte de segfault\n");
-      User* aux = usr;
-      usr->prev->next = usr->next;
-      usr->next->prev = usr->prev;
-      usr = usr->next;
-
       printf("User ID %d had a total time on CPU of %.5f \n", usr->uid, usr->total_user_time);
-      //free(aux);
+      if(usr->next != usr)
+      {
+        User* aux = usr;
+        usr->prev->next = usr->next;
+        usr->next->prev = usr->prev;
+        usr = usr->next;
+        free(aux);
+      }
+      else
+      {
+        free(usr);
+        usr = NULL;
+      }
 
     } else usr = usr->next;
   }
