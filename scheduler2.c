@@ -7,7 +7,7 @@
 #include <signal.h>
 #include <stdbool.h>
 
-#include "so.h"
+#include "scheduler2.h"
 
 #define CNT_CPUS 1
 #define BASE_USER_TIME 8
