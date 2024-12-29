@@ -8,8 +8,8 @@ typedef struct Process
   int exec_time; // timpul necesar pentru a se executa
   int arrival_time; // timpul la care ajunge pe CPU
   
-  struct Process *prev; // pointer catre procesul anterior
-  struct Process *next; // pointer catre procesul urmator
+  Process *prev; // pointer catre procesul anterior
+  Process *next; // pointer catre procesul urmator
 }Process;
 
 typedef struct User
@@ -24,14 +24,14 @@ typedef struct User
   int cnt_processes_incoming, cnt_processes_available; // numarul total de procese
   
 
-  struct Process *current_incoming;
+  Process *current_incoming;
   Process *current_available; 
-  struct User* prev; // pointer catre userul anterior
-  struct User* next; // pointer catre userul urmator              
+  User* prev; // pointer catre userul anterior
+  User* next; // pointer catre userul urmator              
 
-  Process* (*generate_processes)(struct User*); // generate processes
-  float (*rr_processes_scheduler)(struct User*); // schedule processes
-  void (*update_available_processes)(struct User*);
+  Process* (*generate_processes)(User*); // generate processes
+  float (*rr_processes_scheduler)(User*); // schedule processes
+  void (*update_available_processes)(User*);
 }User;
 
 typedef struct CPU
@@ -41,10 +41,10 @@ typedef struct CPU
   
   int cnt_users; // numarul total de useri
     
-  struct User *current; // userul de pe CPU
+  User *current; // userul de pe CPU
   
-  struct User* (*generate_users)(struct CPU*); // generate users
-  float (*wrr_users_scheduler)(struct CPU*); // schedule users
+  User* (*generate_users)(CPU*); // generate users
+  float (*wrr_users_scheduler)(CPU*); // schedule users
 }CPU;
 
 
