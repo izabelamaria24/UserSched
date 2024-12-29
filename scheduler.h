@@ -19,13 +19,14 @@ typedef struct User
   int uid; // user ID
   char username[16]; // username
   float weight; // user weight
-  float allocated_time; 
+  float allocated_time_value;
+  float allocated_time;
   float total_user_time;
 
   int cnt_processes_incoming, cnt_processes_available; // numarul total de procese
   
 
-  struct Process* current_incoming, current_available; 
+  struct Process* current_incoming, *current_available; 
   struct User* prev; // pointer catre userul anterior
   struct User* next; // pointer catre userul urmator              
 
@@ -38,8 +39,8 @@ typedef struct Process
 {
   pid_t pid; // ID-ul procesului
   int uid; // ID-ul userului corespunzator
-  int exec_time; // timpul necesar pentru a se executa
-  int arrival_time; // timpul la care ajunge pe CPU
+  float exec_time; // timpul necesar pentru a se executa
+  float arrival_time; // timpul la care ajunge pe CPU
   
   struct Process *prev; // pointer catre procesul anterior
   struct Process *next; // pointer catre procesul urmator
