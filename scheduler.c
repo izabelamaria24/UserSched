@@ -110,7 +110,7 @@ struct User* generate_users(struct CPU* cpu)
     usr->weight = (rand() % SPAN_USER_WEIGHT) / (float)SPAN_USER_WEIGHT;
     usr->allocated_time_value = BASE_USER_TIME * usr->weight;
     usr->total_user_time = 0;
-    printf("User ID: %d has allocated time %.5f \n", usr->uid, usr->allocated_time);
+    printf("User ID: %d has allocated time %.5f \n", usr->uid, usr->allocated_time_value);
 
     usr->cnt_processes_available = 0;
     usr->cnt_processes_incoming = rand() % SPAN_CNT_PROCESSES + 1;
