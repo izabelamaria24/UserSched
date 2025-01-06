@@ -12,6 +12,7 @@ typedef struct CPU
   
   struct User* (*generate_users)(struct CPU*); // generate users
   float (*wrr_users_scheduler)(struct CPU*); // schedule users
+  void (*print_users)(struct CPU*) // in file
 };
 
 typedef struct User
@@ -32,7 +33,8 @@ typedef struct User
 
   struct Process* (*generate_processes)(struct User*); // generate processes
   float (*rr_processes_scheduler)(struct User*); // schedule processes
-  void (*update_available_processes)(struct User*);
+  void (*update_available_processes)(struct User*); 
+  void (*print_processes)(struct User*); // in console
 };
 
 typedef struct Process
