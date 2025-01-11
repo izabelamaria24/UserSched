@@ -1,0 +1,11 @@
+Process 216026 ( user 0 ): arrival time 39.00 and execution time 3.00
+Process 216027 ( user 0 ): arrival time 26.00 and execution time 15.00
+Process 216028 ( user 0 ): arrival time 7.00 and execution time 3.00
+Process 216029 ( user 0 ): arrival time 6.00 and execution time 26.00
+Process 216030 ( user 0 ): arrival time 44.00 and execution time 10.00
+Process 216031 ( user 0 ): arrival time 42.00 and execution time 18.00
+Process 216032 ( user 0 ): arrival time 18.00 and execution time 12.00
+
+User ID 0 has allocated time 4.96 and 7 processes
+
+SUCCESS: Process 216028 (0) has finished execution.
