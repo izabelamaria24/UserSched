@@ -30,6 +30,7 @@ pthread_cond_t process_cond;
 sem_t cpu_semaphore;
 
 int logging;
+volatile sig_atomic_t shutdown_requested = 0;
 
 static inline float min(float a, float b)
 {
@@ -363,7 +364,7 @@ float wrr_users_scheduler(struct CPU* cpu)
 {
   struct User* usr = cpu->current;
   
-  while (usr != NULL)
+  while (usr != NULL && !shutdown_requested)
   {
     usr->allocated_time = usr->allocated_time_value;
     printf("\n----------------------------------------------\n");
@@ -401,6 +402,11 @@ float wrr_users_scheduler(struct CPU* cpu)
     }
   }
 
+  if (shutdown_requested)
+  {
+    printf("Scheduler interrupted for shutdown.\n");
+  }
+
   print_in_file("Total CPU time %.2f\n",cpu->total_runtime);
   printf("Total CPU time %.2f\n",cpu->total_runtime);
 }
@@ -410,9 +416,50 @@ void handle_sigchld(int sig)
   while (waitpid(-1, NULL, WNOHANG) > 0);
 }
 
+void handle_sigint(int sig)
+{
+  printf("Shutdown initiated...\n");
+  shutdown_requested = 1;
+
+  for (int i = 0; i < CNT_CPUS; i++)
+  {
+    struct User* usr = cpus[i].current;
+    if (usr != NULL)
+    {
+      do
+      { 
+        struct Process* proc = usr->current_available;
+        while (proc != NULL)
+        {
+          printf("Terminating process %d...\n", proc->pid);
+          kill(proc->pid, SIGKILL);
+          waitpid(proc->pid, NULL, 0);
+
+          struct Process* next = proc->next;
+          free(proc);
+          if (next == proc) break;
+          proc = next;
+        }
+
+        struct User* next_user = usr->next;
+        free(usr);
+        if (next_user == usr) break;
+        usr = next_user;
+      } while(usr != cpus[i].current);
+    }
+  }
+
+  close(logging);
+  cleanup_sync();
+
+  printf("Shutdown complete.\n");
+  exit(0);
+}
+
 int main() 
 {
   signal(SIGCHLD, handle_sigchld);
+  signal(SIGINT, handle_sigint);
 
   srand(time(NULL));
   
