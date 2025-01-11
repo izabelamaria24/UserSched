@@ -129,6 +129,12 @@ struct Process* generate_processes(struct User* usr)
   for (int i = 0; i < usr->cnt_processes_incoming; i++)
   {
     struct Process* proc = malloc(sizeof(struct Process));
+    if (proc == NULL)
+    {
+      perror("Malloc failed for process");
+      exit(1);
+    }
+
     proc->uid = usr->uid;
     proc->exec_time = rand() % SPAN_PROCESS_EXEC_TIME + 1;
     proc->arrival_time = rand() % SPAN_PROCESS_ARRIVAL_TIME + 1;
@@ -151,6 +157,7 @@ struct Process* generate_processes(struct User* usr)
       
     } else {
       perror("fork failed");
+      free(proc);
       exit(1);
     }
 
@@ -177,6 +184,12 @@ struct User* generate_users(struct CPU* cpu)
   for (int i = 0; i < cpu->cnt_users; i++)
   {
     struct User* usr = malloc(sizeof(struct User));
+    if (usr == NULL)
+    {
+      perror("Malloc failed for user");
+      exit(1);
+    }
+
     usr->uid = i;
     // user->username = "user" + i;
     usr->weight = ((rand() % SPAN_USER_WEIGHT) + 10 ) / (float)SPAN_USER_WEIGHT;
@@ -456,6 +469,27 @@ void handle_sigint(int sig)
   exit(0);
 }
 
+void memory_cleanup()
+{
+  for (int i = 0; i < CNT_CPUS; i++)
+  {
+    struct User* usr = cpus[i].current;
+    while (usr != NULL)
+    {
+      struct Process* proc = usr->current_available;
+      while (proc != NULL)
+      {
+        struct Process* next_proc = proc->next;
+        free(proc);
+        proc = next_proc;
+      }
+      struct User* next_user = usr->next;
+      free(usr);
+      usr = next_user;
+    }
+  }
+}
+
 int main() 
 {
   signal(SIGCHLD, handle_sigchld);
@@ -486,6 +520,7 @@ int main()
 
   wrr_users_scheduler(&cpus[0]);
 
+  memory_cleanup();
   close(logging);
   cleanup_sync();
 
