@@ -157,7 +157,6 @@ struct Process* generate_processes(struct User* usr)
       
     } else {
       perror("fork failed");
-      free(proc);
       exit(1);
     }
 
@@ -346,7 +345,6 @@ float rr_processes_scheduler(struct User* usr)
         {
           proc = NULL;
         }
-        free(aux);
         usr->cnt_processes_available--;
         //sleep(5);
       }
@@ -356,6 +354,7 @@ float rr_processes_scheduler(struct User* usr)
       }
     }
     usr->current_available = proc;
+
     return usr->allocated_time - available_user_time;
   } 
   else
@@ -369,6 +368,7 @@ float rr_processes_scheduler(struct User* usr)
     {
        return waited + rr_processes_scheduler(usr);
     } 
+
     return waited;
   }   
 }
@@ -406,7 +406,6 @@ float wrr_users_scheduler(struct CPU* cpu)
         usr = NULL;
       }
       
-      free(aux);
       cpu->cnt_users--;
     } 
     else
@@ -449,13 +448,11 @@ void handle_sigint(int sig)
           waitpid(proc->pid, NULL, 0);
 
           struct Process* next = proc->next;
-          free(proc);
           if (next == proc) break;
           proc = next;
         }
 
         struct User* next_user = usr->next;
-        free(usr);
         if (next_user == usr) break;
         usr = next_user;
       } while(usr != cpus[i].current);
@@ -490,6 +487,15 @@ void memory_cleanup()
   }
 }
 
+void* cpu_scheduler_thread(void* arg)
+{
+  struct CPU* cpu = (struct CPU*)arg;
+  printf("Starting scheduler for CPU %d\n", cpu->cpu_id);
+  wrr_users_scheduler(cpu);
+  printf("Scheduler for CPU %d finished\n", cpu->cpu_id);
+  return NULL;
+}
+
 int main() 
 {
   signal(SIGCHLD, handle_sigchld);
@@ -514,15 +520,25 @@ int main()
     cpus[i].cnt_users = rand() % SPAN_CNT_USERS + 1;
     cpus[i].current = generate_users(&cpus[i]);
   }
+
+  pthread_t cpu_threads[CNT_CPUS];
+  for (int i = 0; i < CNT_CPUS; i++)
+  {
+    pthread_create(&cpu_threads[i], NULL, cpu_scheduler_thread, &cpus[i]);
+  }
+
+  for (int i = 0; i < CNT_CPUS; i++)
+  {
+    pthread_join(cpu_threads[i], NULL);
+  }
   
   sleep(5);
   print_users(&cpus[0]);
 
-  wrr_users_scheduler(&cpus[0]);
-
-  memory_cleanup();
+  //memory_cleanup();
   close(logging);
   cleanup_sync();
 
+  printf("All CPUs finished.\n");
   return 0;
 }
