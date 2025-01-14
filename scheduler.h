@@ -3,7 +3,7 @@
 
 typedef struct CPU
 {
-  int cpu_id; // ID-ul CPU-ului
+  int id; // ID-ul CPU-ului
   float total_runtime; // timpul total petrecut pe CPU
   
   int cnt_users; // numarul total de useri
@@ -12,8 +12,8 @@ typedef struct CPU
   
   struct User* (*generate_users)(struct CPU*); // generate users
   float (*wrr_users_scheduler)(struct CPU*); // schedule users
-  void (*print_users)(struct CPU*) // in file
-};
+  void (*print_users)(struct CPU*); // in file
+}CPU;
 
 typedef struct User
 {
@@ -32,10 +32,10 @@ typedef struct User
   struct User* next; // pointer catre userul urmator              
 
   struct Process* (*generate_processes)(struct User*); // generate processes
-  float (*rr_processes_scheduler)(struct User*); // schedule processes
+  float (*rr_processes_scheduler)(struct User*, struct CPU*); // schedule processes
   void (*update_available_processes)(struct User*); 
-  void (*print_processes)(struct User*); // in console
-};
+  void (*print_processes)(struct User*, struct CPU*); // in console
+}User;
 
 typedef struct Process
 {
@@ -46,7 +46,6 @@ typedef struct Process
   
   struct Process *prev; // pointer catre procesul anterior
   struct Process *next; // pointer catre procesul urmator
-};
-
+}Process;
 
 #endif // SCHEDULER_H

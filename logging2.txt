@@ -1,0 +1,31 @@
+Process 83620 ( user 0 ): arrival time 9.00 and execution time 24.00
+Process 83621 ( user 0 ): arrival time 37.00 and execution time 10.00
+Process 83622 ( user 0 ): arrival time 40.00 and execution time 26.00
+Process 83623 ( user 1 ): arrival time 6.00 and execution time 21.00
+Process 83624 ( user 1 ): arrival time 50.00 and execution time 8.00
+Process 83625 ( user 1 ): arrival time 15.00 and execution time 12.00
+Process 83626 ( user 1 ): arrival time 34.00 and execution time 13.00
+Process 83627 ( user 1 ): arrival time 19.00 and execution time 9.00
+Process 83628 ( user 1 ): arrival time 36.00 and execution time 4.00
+
+User ID 0 has allocated time 15.52 and 3 processes
+User ID 1 has allocated time 2.56 and 6 processes
+
+SUCCESS: Process 83620 (0) has finished execution.
+SUCCESS: Process 83621 (0) has finished execution.
+SUCCESS: Process 83622 (0) has finished execution.
+
+SUCCESS: User ID 0 finished and had a total time on CPU of 75.52 
+CPU time is 75.52
+
+SUCCESS: Process 83628 (1) has finished execution.
+SUCCESS: Process 83625 (1) has finished execution.
+SUCCESS: Process 83623 (1) has finished execution.
+SUCCESS: Process 83627 (1) has finished execution.
+SUCCESS: Process 83624 (1) has finished execution.
+SUCCESS: Process 83626 (1) has finished execution.
+
+SUCCESS: User ID 1 finished and had a total time on CPU of 74.68 
+CPU time is 150.20
+
+Total CPU time 150.20

@@ -1,0 +1,22 @@
+Process 83601 ( user 0 ): arrival time 13.00 and execution time 25.00
+Process 83602 ( user 0 ): arrival time 36.00 and execution time 15.00
+Process 83603 ( user 0 ): arrival time 2.00 and execution time 25.00
+Process 83604 ( user 0 ): arrival time 5.00 and execution time 17.00
+Process 83605 ( user 0 ): arrival time 24.00 and execution time 16.00
+Process 83606 ( user 0 ): arrival time 18.00 and execution time 26.00
+Process 83607 ( user 0 ): arrival time 50.00 and execution time 17.00
+
+User ID 0 has allocated time 12.00 and 7 processes
+
+SUCCESS: Process 83604 (0) has finished execution.
+SUCCESS: Process 83602 (0) has finished execution.
+SUCCESS: Process 83605 (0) has finished execution.
+SUCCESS: Process 83603 (0) has finished execution.
+SUCCESS: Process 83607 (0) has finished execution.
+SUCCESS: Process 83601 (0) has finished execution.
+SUCCESS: Process 83606 (0) has finished execution.
+
+SUCCESS: User ID 0 finished and had a total time on CPU of 153.00 
+CPU time is 153.00
+
+Total CPU time 153.00

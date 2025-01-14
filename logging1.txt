@@ -1,0 +1,47 @@
+Process 83608 ( user 0 ): arrival time 48.00 and execution time 10.00
+Process 83609 ( user 0 ): arrival time 22.00 and execution time 23.00
+Process 83610 ( user 1 ): arrival time 18.00 and execution time 7.00
+Process 83611 ( user 1 ): arrival time 17.00 and execution time 20.00
+Process 83612 ( user 1 ): arrival time 50.00 and execution time 22.00
+Process 83613 ( user 1 ): arrival time 18.00 and execution time 15.00
+Process 83614 ( user 1 ): arrival time 47.00 and execution time 25.00
+Process 83615 ( user 1 ): arrival time 32.00 and execution time 4.00
+Process 83616 ( user 2 ): arrival time 37.00 and execution time 9.00
+Process 83617 ( user 2 ): arrival time 4.00 and execution time 12.00
+Process 83618 ( user 2 ): arrival time 32.00 and execution time 4.00
+
+User ID 0 has allocated time 10.08 and 2 processes
+User ID 1 has allocated time 16.80 and 6 processes
+User ID 2 has allocated time 6.72 and 3 processes
+User ID 3 has allocated time 4.96 and 1 processes
+
+Process 83619 ( user 3 ): arrival time 25.00 and execution time 9.00
+SUCCESS: Process 83615 (1) has finished execution.
+SUCCESS: Process 83617 (2) has finished execution.
+SUCCESS: Process 83610 (1) has finished execution.
+SUCCESS: Process 83609 (0) has finished execution.
+SUCCESS: Process 83618 (2) has finished execution.
+SUCCESS: Process 83608 (0) has finished execution.
+
+SUCCESS: User ID 0 finished and had a total time on CPU of 63.24 
+CPU time is 63.24
+
+SUCCESS: Process 83613 (1) has finished execution.
+SUCCESS: Process 83611 (1) has finished execution.
+SUCCESS: Process 83612 (1) has finished execution.
+SUCCESS: Process 83614 (1) has finished execution.
+
+SUCCESS: User ID 1 finished and had a total time on CPU of 126.60 
+CPU time is 189.84
+
+SUCCESS: Process 83619 (3) has finished execution.
+
+SUCCESS: User ID 3 finished and had a total time on CPU of 38.76 
+CPU time is 228.60
+
+SUCCESS: Process 83616 (2) has finished execution.
+
+SUCCESS: User ID 2 finished and had a total time on CPU of 51.88 
+CPU time is 280.48
+
+Total CPU time 280.48
